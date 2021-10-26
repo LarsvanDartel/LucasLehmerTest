@@ -1,0 +1,87 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{parskip}
+
+\newcommand{\N}{\mathbb{N}}
+
+\title{
+    Finding primes like Édouard Lucas \\
+    \large{2WF40 Writing Assignment Homework Group 14}
+}
+\author{Jan Bulthuis \\ 
+        \small{Student Nr. 1696866} \\
+        \small{Eindhoven University of Technology} \\
+        \and
+        Lars van Dartel \\
+        \small{Student Nr. 1673858} \\
+        \small{Eindhoven University of Technology} \\
+        \and
+        Stefan Engbers \\ 
+        \small{Student Nr. 1757962}\\
+        \small{Eindhoven University of Technology} \\
+        \and
+        Wouter Vermeer \\
+        \small{Student Nr. 1672428} \\
+        \small{Eindhoven University of Technology}
+        }
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\newpage
+\setcounter{page}{1}
+\section{Introduction}
+There are many useful application of large primes. One of them is the secure encryption of data using the cryptosystem RSA. For this, $2048$-bit numbers are commonly used. Needless to say, with the amount of online traffic, the demand for large primes is enormous. However, primes much larger than $2048$ bits (617 digits) long have very little use. Nonetheless, many people (or their computers) have spent thousands of hours computing primes as large as possible.
+
+\subsection{Mersenne primes}
+Mersenne primes are defined as prime numbers that are one less than a power of two, or formally $M_n = 2^n - 1$ for some $n \in \N$.
+
+\textbf{Statement.} For $2^n - 1$ to be prime, $n$ must be prime. \\
+\textbf{Proof.} We use the identity:
+\begin{equation}\label{MersenneIdentity}
+    X^{ab}-1 = \left( X^a - 1 \right) \cdot \left( X^{a(b-1)} + X^{a(b-2)} + ... + X^a + 1 \right).
+\end{equation}
+This tells us that if $n$ is composite, i.e., $n = a \cdot b$ for some integers $a$ and $b$, then $2^n-1$ is also composite, since by the identity \eqref{MersenneIdentity}, $2^{ab}-1$ can be factored into the factors $X^a - 1$ and $2^{a(b-1)} + 2^{a(b-2)} + ... + 2^a + 1$
+
+\subsection{Édouard Lucas}
+François Édouard Anatole Lucas (1842 - 1891) was a famous mathmetician that studied the Fibonacci sequcence. He devised his own method for checking the primality of large numbers without factorising. Using the Lucas numbers, which are much alike the Fibonacci sequcence. The Lucas numbers are defined in the following way:
+\begin{eqnarray*}
+    L_1 = 1; \\
+    L_2 = 3; \\
+    L_n = L_{n-1} + L_{n-2}.
+\end{eqnarray*}
+An integer $n$ is \textit{probably} prime, also called a Lucas probable prime, if $p \bigm| L_n$. 
+
+Lucas spent 19 years of his life proving the primality of the Mersenne prime $2^{127}-1$. This still remains as the largest prime number of which the primality was proved by hand.
+
+\subsection{Lucas-Lehmer primality test}
+The primality test used by Lucas was later improved by the American mathmetician D.H. Lehmer. The primality of Mersenne number $M_p = 2^p-1$ with $p$ prime can be found in the following way:
+
+Denote the sequence $s$ by
+\begin{eqnarray*}
+    s_1 &=& 4; \\
+    s_n &=& s_{n-1}^2-2,
+\end{eqnarray*}
+
+The first few elements of this sequence are $4, 14, 194, 37634, \dots$.
+
+then $M_p$ is prime if and only if $s_{p-1} \equiv 0 \mod{p}$. The proof of this can be found here \cite{LucasLehmerPrimalityTestProof}.
+
+\section{Finding primes}
+There are multiple ways of finding large primes. One of them is by picking random numbers and checking their primality. This method is used to generate the large primes needed for RSA cryptosystems. A random 2048-bit number is chosen. It's first bit is set to one to ensure a large enough number and it's last bit is set to one to make it odd. Then the primality of the number is checked. 
+
+
+The Prime Number Theorem \cite{PrimeNumberTheorem} states that there are approximately $n\ln(n)$ primes $p \leq n$. This gives that the probability of choosing a random number below some integer $n$ and finding a prime is equal to $1/\ln(n)$, since there are $n$ possible number to choose from and there are $n \ln (n)$ primes. 
+
+For RSA cryptosystems, numbers below $2^{2084}$ are chosen 
+
+However, for finding primes much larger, this method is too slow. For our use, we designed a program that would loop over all mersenne numbers $M_p = 2^p-1$ with $p$ prime and then check it's primality using the Lucas-Lehmer primality test. 
+
+\newpage
+\bibliography{references}
+\bibliographystyle{apalike}
+\end{document}
